@@ -85,18 +85,38 @@ const updateController = (id) => {
 
 const newController = () => {
     // ..... introducir código
+    $('#main').html(quizForm('New Quiz', 'create', 0, "", ""));
 };
 
 const createController = () => {
     // ..... introducir código
+    let quizzes = JSON.parse(localStorage.quizzes);
+    quizzes.push({question:$('#question').val(),anawer:$('#answer').val()});
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
 const deleteController = (id) => {
     // ..... introducir código
+    let quizzes = JSON.parse(localStorage.quizzes);
+    let confirmacion = confirm('Vas a borrar el quiz. ¿Está seguro de que quiere borrarlo?');
+
+    if (confirmacion){
+        quizzes.splice(id,1);
+    }
+
+    localStorage.quizzes = JSON.stringify(quizzes);
+    indexController();
 };
 
 const resetController = (id) => {
     // ..... introducir código
+    let confirmacion = confirm('Vas a resetear los quizes. ¿Está seguro de que quiere hacerlo?');
+
+    if (confirmacion){
+        localStorage.quizzes = initial_quizzes;
+    }
+    indexController();
 };
 
 
@@ -108,6 +128,12 @@ const eventsController = ()=> {
   $(document).on('click','.check',  (e)=> checkController(Number($(e.target).attr("quizid"))));
   $(document).on('click','.edit',   (e)=> editController(Number($(e.target).attr("quizid"))));
   $(document).on('click','.update', (e)=> updateController(Number($(e.target).attr("quizid"))));
+  $(document).on('click','.new',    () => newController());
+  $(document).on('click','.delete', (e)=> deleteController(Number($(e.target).attr("quizid"))));
+  $(document).on('click','.create', () => createController());
+  $(document).on('click','.reset',  (e)=> resetController(Number($(e.target).attr("quizid"))));
+
+
 
     // ..... añadir manejadores de eventos new, create, delete y reset
 }
@@ -121,6 +147,6 @@ $(function(){
 </head>
 <body>
     <h1>MVC: Quizzes</h1>
-    <div id="main"><div>
+    <div id="main"></div>
 </body>
 </html>
